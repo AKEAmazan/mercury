@@ -215,12 +215,12 @@ USE_TZ = True
 if DEBUG or SERVE_STATIC:
     STATIC_URL = "/static/"
     STATICFILES_DIRS = [FRONTEND_BUILD_DIR, FRONTEND_STATIC_DIR]
-    if SERVE_STATIC:
-        STATIC_ROOT = BASE_DIR / "static"
 else:
     STATIC_URL = "/django_static/"
     STATIC_ROOT = BASE_DIR / "django_static"
 
+if SERVE_STATIC:
+    STATIC_ROOT = BASE_DIR / "static"
 MEDIA_ROOT = BASE_DIR / "media"
 
 if not os.path.exists(MEDIA_ROOT):

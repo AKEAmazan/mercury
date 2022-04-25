@@ -51,9 +51,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("-" * 53))
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"Please open the following address in your web browser"
+                    "Please open the following address in your web browser"
                 )
             )
+
             self.stdout.write(
                 self.style.SUCCESS(f"--> http://127.0.0.1:8000/app/{notebook_id}")
             )
@@ -102,15 +103,15 @@ class Command(BaseCommand):
             except SystemExit:
                 os._exit(0)
         except Exception as e:
-            print("Mercury watch error.", str(e))
+            print("Mercury watch error.", e)
 
     def delete_notebook(self, id):
         Notebook.objects.filter(pk=id).delete()
-        self.stdout.write(self.style.HTTP_INFO(f"Notebook deleted"))
+        self.stdout.write(self.style.HTTP_INFO("Notebook deleted"))
 
     def clear_celery_backend(self):
         try:
             if os.path.exists("celery.sqlite"):
                 os.remove("celery.sqlite")
         except Exception as e:
-            print("Problem with removing Celery backend", str(e))
+            print("Problem with removing Celery backend", e)

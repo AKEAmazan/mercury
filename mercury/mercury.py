@@ -50,8 +50,8 @@ def main():
                                         |___/ 
         """
         print(logo)
-        
-        
+
+
         if "demo" in sys.argv:
             create_demo_notebook("demo.ipynb")
             sys.argv.remove("demo")
@@ -79,7 +79,7 @@ def main():
                         ["mercury.py", "createsuperuser", "--noinput"]
                     )
             except Exception as e:
-                print(str(e))
+                print(e)
         if os.environ.get("SERVE_STATIC") is not None:
             execute_from_command_line(["mercury.py", "collectstatic", "--noinput"])
         if os.environ.get("NOTEBOOKS") is not None and run_add_notebook is None:
@@ -142,7 +142,7 @@ def main():
         except SystemExit:
             os._exit(0)
     except Exception as e:
-        print("Mercury error.", str(e))
+        print("Mercury error.", e)
 
 
 if __name__ == "__main__":

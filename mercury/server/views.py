@@ -20,11 +20,10 @@ class WelcomeMessage(APIView):
         welcome_file = os.environ.get("WELCOME")
         if welcome_file is not None:
             if welcome_msg is None:
-                if os.path.exists(welcome_file):
-                    with open(welcome_file, encoding="utf-8", errors="ignore") as fin:
-                        welcome_msg = fin.read()
-                else:
+                if not os.path.exists(welcome_file):
                     return Response({"msg": ""})
+                with open(welcome_file, encoding="utf-8", errors="ignore") as fin:
+                    welcome_msg = fin.read()
             if welcome_msg is not None:
                 return Response({"msg": welcome_msg})
         return Response({"msg": ""})

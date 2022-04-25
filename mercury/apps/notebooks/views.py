@@ -16,7 +16,7 @@ if is_pro:
 
 
 def in_commas(word):
-    return "," + word + ","
+    return f",{word},"
 
 
 def notebooks_queryset(request):

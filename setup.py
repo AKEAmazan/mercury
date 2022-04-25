@@ -7,8 +7,7 @@ with open("README.md", "r", encoding="utf-8", errors="ignore") as fh:
 def list_files(directory):
     paths = []
     for (path, directories, filenames) in os.walk(directory):
-        for filename in filenames:
-            paths.append(os.path.join(path, filename))
+        paths.extend(os.path.join(path, filename) for filename in filenames)
     return paths
 
 setup(

@@ -52,8 +52,8 @@ class ExecuteNotebookAuthorizationTestCase(TestCase):
 share: private
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         # create user and login
         user = {
@@ -65,7 +65,7 @@ share: private
             reverse("rest_login"), user, content_type="application/json"
         )
         token = response.json()["key"]
-        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
 
         # try to execute the notebook as anonymous user
         params = {"session_id": "some_session_id", "params": {}}
