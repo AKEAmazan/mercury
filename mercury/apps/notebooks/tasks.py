@@ -30,12 +30,8 @@ def process_nbconvert_errors(error_msg):
     for e in error_msg.decode("utf-8").split("\n"):
         if e == "":
             continue
-        known_warning = False
-        for w in known_warnings:
-            if w in e:
-                known_warning = True
-                break
-        if not known_warning and e != "":
+        known_warning = any(w in e for w in known_warnings)
+        if not known_warning:
             error_lines += [e]
     return "\n".join(error_lines)
 
@@ -259,7 +255,7 @@ def task_init_notebook(
         if notebook_id is not None:
             raise e
         else:
-            print("Error during notebook initialization.", str(e))
+            print("Error during notebook initialization.", e)
 
 
 @shared_task(bind=True)

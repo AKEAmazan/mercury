@@ -71,7 +71,7 @@ class ListOutputFilesView(APIView):
             print(
                 f"Trying to list files for session_id {session_id} and task_id {task_id}"
             )
-            print("Exception occured", str(e))
+            print("Exception occured", e)
         return Response(files_urls)
 
 
@@ -96,7 +96,7 @@ class ClearTasksView(APIView):
                         shutil.rmtree(output_dir)
                 except Exception as e:
                     print(f"Trying to delete {output_file} and {output_dir}")
-                    print(str(e))
+                    print(e)
 
             tasks.delete()
 
@@ -104,6 +104,6 @@ class ClearTasksView(APIView):
             print(
                 f"Trying to clear tasks for notebook_id {notebook_id} and session_id {session_id}"
             )
-            print("Exception occured", str(e))
+            print("Exception occured", e)
 
         return Response(status.HTTP_204_NO_CONTENT)

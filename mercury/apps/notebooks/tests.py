@@ -37,8 +37,8 @@ class InitNotebookTestCase(TestCase):
     def test_init_notebook_without_yaml(self):
 
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_without_yaml(tmp.name + ".ipynb")
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_without_yaml(f"{tmp.name}.ipynb")
+            task_init_notebook(f"{tmp.name}.ipynb")
             # in the case of missing YAML
             # notebook title should be 'Please provide title'
             nb = Notebook.objects.get(pk=1)
@@ -59,8 +59,8 @@ class InitNotebookTestCase(TestCase):
             yaml = """---
 title:
 ---"""
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
             # in the case of missing YAML
             # notebook title should be 'Please provide title'
@@ -75,8 +75,8 @@ class ShareNotebookTestCase(TestCase):
 share: public
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_without_yaml(tmp.name + ".ipynb")
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_without_yaml(f"{tmp.name}.ipynb")
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         response = self.client.get("/api/v1/notebooks/")
         self.assertEqual(response.status_code, 200)
@@ -90,8 +90,8 @@ share: public
 share: private
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         # not logged user should see 0 notebooks
         response = self.client.get("/api/v1/notebooks/")
@@ -108,7 +108,7 @@ share: private
             reverse("rest_login"), user, content_type="application/json"
         )
         token = response.json()["key"]
-        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
         # logged user with token in headers should see 1 notebook
         response = self.client.get("/api/v1/notebooks/", **headers)
         self.assertEqual(response.status_code, 200)
@@ -126,7 +126,7 @@ share: private
             reverse("rest_login"), user, content_type="application/json"
         )
         token = response.json()["key"]
-        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
 
         self.assertEqual(Notebook.objects.all().count(), 0)
 
@@ -134,8 +134,8 @@ share: private
 share: {user["username"]}
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         # not logged user should see 0 notebooks
         response = self.client.get("/api/v1/notebooks/")
@@ -157,7 +157,7 @@ share: {user["username"]}
             reverse("rest_login"), user2, content_type="application/json"
         )
         token2 = response.json()["key"]
-        headers2 = {"HTTP_AUTHORIZATION": "Token " + token2}
+        headers2 = {"HTTP_AUTHORIZATION": f"Token {token2}"}
 
         # logged by different user should see 0 notebooks
         response = self.client.get("/api/v1/notebooks/", **headers2)
@@ -178,7 +178,7 @@ share: {user["username"]}
             reverse("rest_login"), user, content_type="application/json"
         )
         token = response.json()["key"]
-        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
 
         # create second user
         user2 = {
@@ -192,7 +192,7 @@ share: {user["username"]}
             reverse("rest_login"), user2, content_type="application/json"
         )
         token2 = response.json()["key"]
-        headers2 = {"HTTP_AUTHORIZATION": "Token " + token2}
+        headers2 = {"HTTP_AUTHORIZATION": f"Token {token2}"}
 
         # create third user
         user3 = {
@@ -206,7 +206,7 @@ share: {user["username"]}
             reverse("rest_login"), user3, content_type="application/json"
         )
         token3 = response.json()["key"]
-        headers3 = {"HTTP_AUTHORIZATION": "Token " + token3}
+        headers3 = {"HTTP_AUTHORIZATION": f"Token {token3}"}
 
         #
         # create a group and add first and second used
@@ -223,8 +223,8 @@ share: {user["username"]}
 share: {group.name}
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         # not logged user should see 0 notebooks
         response = self.client.get("/api/v1/notebooks/")
@@ -257,7 +257,7 @@ share: {group.name}
             reverse("rest_login"), user, content_type="application/json"
         )
         token = response.json()["key"]
-        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
 
         # create second user
         user2 = {
@@ -271,7 +271,7 @@ share: {group.name}
             reverse("rest_login"), user2, content_type="application/json"
         )
         token2 = response.json()["key"]
-        headers2 = {"HTTP_AUTHORIZATION": "Token " + token2}
+        headers2 = {"HTTP_AUTHORIZATION": f"Token {token2}"}
 
         self.assertEqual(Notebook.objects.all().count(), 0)
 
@@ -279,15 +279,15 @@ share: {group.name}
 share: {user2["username"]}
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         yaml = f"""---
 share: private
 ---"""
         with tempfile.NamedTemporaryFile() as tmp:
-            create_notebook_with_yaml(tmp.name + ".ipynb", yaml=yaml)
-            task_init_notebook(tmp.name + ".ipynb")
+            create_notebook_with_yaml(f"{tmp.name}.ipynb", yaml=yaml)
+            task_init_notebook(f"{tmp.name}.ipynb")
 
         # first user should see see 1 notebook
         response = self.client.get("/api/v1/notebooks/", **headers)
